@@ -1,0 +1,6 @@
+/data
+*.qpproj
+*.backup
+/spider_output
+*.code-workspace
+/classifiers
