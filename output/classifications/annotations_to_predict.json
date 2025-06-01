@@ -1,0 +1,13 @@
+[
+  {
+    "id": "e46e9ebc-812c-4aaf-b52f-8e390842d36c",
+    "slide_path": "qupath.lib.images.servers.openslide.OpenslideImageServer: file:/E:/kolonDeneme/biyopsi/ANON95IRSJ19O_1_1_001.svs",
+    "image_name": "ANON95IRSJ19O_1_1_001",
+    "roi": {
+      "x": 12532.0,
+      "y": 16655.0,
+      "width": 3150.0,
+      "height": 2865.0
+    }
+  }
+]
