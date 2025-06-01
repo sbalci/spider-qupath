@@ -1,0 +1,31 @@
+SPIDER QuPath Project Structure
+===============================
+
+Project organization:
+
+spider-qupath/
+├── scripts/              # QuPath Groovy scripts
+│   ├── spider_classify_annotations.groovy
+│   ├── spider_tile_classifier.groovy
+│   └── spider_plugin_menu.groovy
+│
+├── python/               # Python scripts for SPIDER models
+│   ├── spider_qupath_classifier.py
+│   └── whole_slide_analysis_spider_universal.py
+│
+├── output/               # Analysis results
+│   ├── classifications/  # Annotation classification results
+│   ├── tiles/           # Tile analysis results
+│   └── whole_slide/     # Whole slide analysis results
+│
+├── config/              # Configuration files
+│   └── spider_config.json
+│
+├── docs/                # Documentation
+│
+└── data/                # QuPath project data (auto-generated)
+
+Usage:
+1. Run scripts from QuPath's script editor
+2. Results are saved in the output directory
+3. Configure settings in config/spider_config.json

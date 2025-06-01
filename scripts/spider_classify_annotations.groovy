@@ -15,8 +15,8 @@ println("INFO: Starting SPIDER classification workflow at " + new Date())
 // Define paths
 def projectPath = buildFilePath(PROJECT_BASE_DIR)
 def pythonPath = "D:\\DigitalPathologyDrafts\\.venv\\Scripts\\python.exe"  // Update this to your Python path
-def outputPath = buildFilePath(projectPath, "spider_output")
-def scriptPath = buildFilePath(projectPath, "spider_qupath_classifier.py")
+def outputPath = new File(new File(projectPath).getParent(), "output/classifications").getAbsolutePath()
+def scriptPath = new File(new File(projectPath).getParent(), "python/spider_qupath_classifier.py").getAbsolutePath()
 def modelPath = "D:\\histai\\SPIDER-colorectal-model"  // Update this to your SPIDER model path
 def tempAnnotationsPath = buildFilePath(outputPath, "annotations_to_predict.json")
 

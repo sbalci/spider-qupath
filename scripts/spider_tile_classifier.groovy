@@ -44,8 +44,8 @@ println("Starting SPIDER tile classification workflow at " + new Date())
 
 // Define paths
 def projectPath = buildFilePath(PROJECT_BASE_DIR)
-def outputPath = buildFilePath(projectPath, "spider_output")
-def scriptPath = buildFilePath(projectPath, "spider_qupath_classifier.py")
+def outputPath = new File(new File(projectPath).getParent(), "output/classifications").getAbsolutePath()
+def scriptPath = new File(new File(projectPath).getParent(), "python/spider_qupath_classifier.py").getAbsolutePath()
 def tempAnnotationsPath = buildFilePath(outputPath, "tiles_to_predict.json")
 
 // Create output directory
