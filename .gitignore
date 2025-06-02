@@ -4,3 +4,4 @@
 /spider_output
 *.code-workspace
 /classifiers
+output/whole_slide/

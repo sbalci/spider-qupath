@@ -523,7 +523,7 @@ def runClassifyAnnotations(String modelType) {
         def height = roi.getBoundsHeight()
         
         annotationData.add([
-            id: annotation.getID(),
+            id: annotation.getID().toString(),  // Ensure ID is converted to string
             slide_path: imagePath,
             image_name: imageName,
             roi: [
@@ -585,7 +585,28 @@ def runClassifyAnnotations(String modelType) {
     
     for (int i = 0; i < jsonArray.size(); i++) {
         def predObj = jsonArray.get(i).getAsJsonObject()
-        def predictionId = predObj.get("id").getAsString()
+        
+        // Handle complex ID structure safely
+        def predictionId
+        def idElement = predObj.get("id")
+        if (idElement.isJsonPrimitive()) {
+            predictionId = idElement.getAsString()
+        } else if (idElement.isJsonObject()) {
+            // Handle complex ID structure - try to extract a meaningful ID
+            def idObj = idElement.getAsJsonObject()
+            if (idObj.has("values") && idObj.get("values").isJsonArray()) {
+                def valuesArray = idObj.get("values").getAsJsonArray()
+                if (valuesArray.size() > 0) {
+                    predictionId = valuesArray.get(0).getAsString()
+                } else {
+                    predictionId = "prediction_${i}"
+                }
+            } else {
+                predictionId = "prediction_${i}"
+            }
+        } else {
+            predictionId = "prediction_${i}"
+        }
         
         def annotation = annotationMap[predictionId]
         if (annotation && !predObj.get("prediction").isJsonNull()) {
@@ -696,7 +717,7 @@ def runTileAnalysis(String modelType) {
     
     selectedAnnotations.eachWithIndex { annotation, annotationIndex ->
         def annotationROI = annotation.getROI()
-        def annotationID = annotation.getID()
+        def annotationID = annotation.getID().toString()  // Convert to string immediately
         
         // Get annotation bounds
         def startX = annotationROI.getBoundsX()
@@ -731,7 +752,7 @@ def runTileAnalysis(String modelType) {
                 if (!annotationROI.getGeometry().intersects(tileROI.getGeometry()))
                     continue
                     
-                // Create unique ID for this tile
+                // Create unique ID for this tile - ensure it's a simple string
                 def tileID = "tile_${annotationID}_${x}_${y}"
                 
                 // Create tile object for JSON
@@ -739,7 +760,7 @@ def runTileAnalysis(String modelType) {
                     id: tileID,
                     slide_path: imagePath,
                     image_name: imageName,
-                    parent_annotation_id: annotationID,
+                    parent_annotation_id: annotationID,  // Already a string now
                     gridX: x,
                     gridY: y,
                     roi: [
@@ -810,7 +831,32 @@ def runTileAnalysis(String modelType) {
     def tileIdToPrediction = [:]
     for (int i = 0; i < predictions.size(); i++) {
         def predObj = predictions.get(i).getAsJsonObject()
-        def tileId = predObj.get("id").getAsString()
+        
+        // Handle complex tile ID structure
+        def tileId
+        def idElement = predObj.get("id")
+        if (idElement.isJsonPrimitive()) {
+            tileId = idElement.getAsString()
+        } else if (idElement.isJsonObject()) {
+            // Handle complex ID structure - extract values and reconstruct ID
+            def idObj = idElement.getAsJsonObject()
+            if (idObj.has("values") && idObj.get("values").isJsonArray()) {
+                def valuesArray = idObj.get("values").getAsJsonArray()
+                if (valuesArray.size() >= 3) {
+                    def annotationId = valuesArray.get(0).getAsString()
+                    def gridX = valuesArray.get(1).getAsInt()
+                    def gridY = valuesArray.get(2).getAsInt()
+                    tileId = "tile_${annotationId}_${gridX}_${gridY}"
+                } else {
+                    tileId = "prediction_${i}"
+                }
+            } else {
+                tileId = "prediction_${i}"
+            }
+        } else {
+            tileId = "prediction_${i}"
+        }
+        
         tileIdToPrediction[tileId] = predObj
     }
     
@@ -835,7 +881,7 @@ def runTileAnalysis(String modelType) {
     
     // Process results by annotation
     selectedAnnotations.each { annotation ->
-        def annotationID = annotation.getID()
+        def annotationID = annotation.getID().toString()  // Convert to string
         
         // Get tiles for this annotation
         def annotationTiles = tilesByAnnotation[annotationID]
@@ -984,7 +1030,7 @@ def showWholeSlideDialog(String modelType) {
         // Parameters
         def strideField = new TextField("560")  // Default = 50% overlap
         def maxPatchesField = new TextField("1000")  // Memory limit
-        def workersField = new TextField("4")  // Number of CPU cores
+        def workersField = new TextField("1")  // Force single-threaded to avoid Windows multiprocessing issues
         
         grid.add(new Label("Output Directory:"), 0, 0)
         grid.add(outputField, 1, 0)
@@ -1000,7 +1046,11 @@ def showWholeSlideDialog(String modelType) {
         
         grid.add(new Label("Workers:"), 0, 3)
         grid.add(workersField, 1, 3)
-        grid.add(new Label("(parallel processing)"), 2, 3)
+        
+        // Add OS-specific note
+        def workersNote = System.getProperty("os.name").toLowerCase().contains("windows") ? 
+            "(Windows: use 1 for stability)" : "(parallel processing)"
+        grid.add(new Label(workersNote), 2, 3)
         
         dialog.getDialogPane().setContent(grid)
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL)
@@ -1031,15 +1081,37 @@ def runWholeSlideAnalysis(String modelType, String outputDir, String stride, Str
         return
     }
     
-    // Get slide path
+    // Get slide path and convert from QuPath format
     def slidePath = getCurrentImageData().getServer().getPath()
     
-    // Convert from QuPath path format if needed
-    if (slidePath.startsWith("file:")) {
-        slidePath = slidePath.substring(slidePath.indexOf("file:") + 5)
-        while (slidePath.startsWith("/")) {
-            slidePath = slidePath.substring(1)
-        }
+    // Parse QuPath path format properly
+    if (slidePath.contains("OpenslideImageServer:")) {
+        slidePath = slidePath.replace("qupath.lib.images.servers.openslide.OpenslideImageServer:", "").trim()
+    } else if (slidePath.contains("BioFormatsImageServer:")) {
+        slidePath = slidePath.replace("BioFormatsImageServer:", "").trim()
+    } else if (slidePath.contains("ImageIOImageServer:")) {
+        slidePath = slidePath.replace("qupath.lib.images.servers.imageio.ImageIOImageServer:", "").trim()
+    }
+    
+    // Remove file: prefix if present
+    if (slidePath.startsWith("file:/")) {
+        slidePath = slidePath.substring(6)  // Remove "file:/"
+    } else if (slidePath.startsWith("file:")) {
+        slidePath = slidePath.substring(5)  // Remove "file:"
+    }
+    
+    // Convert forward slashes to backslashes on Windows if needed
+    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+        slidePath = slidePath.replace("/", "\\")
+    }
+    
+    println("Converted slide path: ${slidePath}")
+    
+    // Verify the file exists
+    if (!new File(slidePath).exists()) {
+        Dialogs.showErrorMessage("File Not Found", 
+            "Slide file not found at: ${slidePath}\n\nPlease check the file path.")
+        return
     }
     
     // Find the Python script
@@ -1064,6 +1136,12 @@ def runWholeSlideAnalysis(String modelType, String outputDir, String stride, Str
     
     // Create output directory if it doesn't exist
     new File(outputDir).mkdirs()
+    
+    // Force single-threaded processing on Windows to avoid multiprocessing issues
+    if (System.getProperty("os.name").toLowerCase().contains("windows") && workers.toInteger() > 1) {
+        println("Warning: Forcing single-threaded processing on Windows to avoid multiprocessing issues")
+        workers = "1"
+    }
     
     // Build command
     def command = [
@@ -1107,7 +1185,7 @@ def runWholeSlideAnalysis(String modelType, String outputDir, String stride, Str
     }
     
     Dialogs.showInfoNotification("Whole Slide Analysis Started", 
-        "Processing slide... Results will be saved to:\n${outputDir}")
+        "Processing slide with ${workers} worker(s)...\nResults will be saved to:\n${outputDir}")
 }
 
 // Install plugin menu in QuPath
