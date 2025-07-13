@@ -1,23 +1,49 @@
-# SPIDER QuPath Plugin - AI-Powered Digital Pathology Analysis
+# SPIDER QuPath Plugin - Educational Weekend Project
 
-> **Quick Start:** Professional pathologists can start analyzing slides with AI in under 30 minutes!
+> ⚠️ **IMPORTANT DISCLAIMER:** This is a weekend educational project created to explore AI models in digital pathology. It is NOT intended for clinical use.
 
 [![Video Tutorial](https://img.shields.io/badge/📺_Video_Tutorial-Watch_on_YouTube-red?style=for-the-badge)](https://www.youtube.com/watch?v=8tLORQ7yUIQ)
 
-## 🎯 What This Repository Offers
+## 🚨 Critical Notice
 
-This is a complete **QuPath plugin** that brings state-of-the-art SPIDER AI models directly into your pathology workflow. No complex setup - just install, configure, and start classifying tissues with 90%+ accuracy.
+**This repository represents:**
+- 📚 A weekend learning project to understand AI integration in pathology
+- 🤖 Code generated with assistance from Claude AI (Anthropic)
+- 🧪 An experimental example of using SPIDER models within QuPath
+- ⚡ A proof-of-concept, not production-ready software
 
-### ✨ Key Benefits for Pathologists
-- **🚀 One-click installation** - Works directly in QuPath
-- **🎯 Three analysis modes** - From quick regions to whole slide analysis  
-- **🧠 Expert-level AI** - 91-96% accuracy across tissue types
-- **⚡ Real-time results** - Classifications appear instantly in QuPath
-- **📊 Detailed reports** - Confidence scores, tissue composition, heatmaps
+**This is NOT:**
+- ❌ Validated for clinical diagnosis or patient care
+- ❌ FDA-approved or CE-marked medical software
+- ❌ Tested across all QuPath/Python version combinations
+- ❌ Guaranteed to work in your specific environment
+
+### ⚠️ Known Limitations
+- **Version Compatibility:** Code may have issues with different QuPath versions (tested on 0.3.0)
+- **Python Dependencies:** Package conflicts may occur depending on your Python setup
+- **Platform Differences:** Behavior may vary between Windows/Mac/Linux
+- **AI-Generated Code:** Some implementations may be suboptimal or contain bugs
+
+## 🎯 What This Educational Project Demonstrates
+
+This weekend project shows how to integrate SPIDER AI models into QuPath for **educational and research purposes only**. It demonstrates the potential of AI in digital pathology workflows.
+
+### ✨ Learning Objectives
+- **🔬 AI Integration** - How to connect machine learning models with pathology software
+- **📝 QuPath Scripting** - Groovy script development for plugin creation
+- **🐍 Python Bridging** - Connecting Python ML models with Java-based applications
+- **🧠 Model Deployment** - Using pre-trained transformers for image classification
+- **📊 Result Visualization** - Displaying AI predictions in a clinical interface
+
+### 🎓 Educational Value
+- Understand modern computational pathology workflows
+- Learn about AI model integration challenges
+- Explore QuPath's extensibility and scripting capabilities
+- See practical examples of medical AI deployment
 
 ---
 
-## 🚀 Quick Start (30 Minutes Setup)
+## 🚀 Educational Setup Guide (For Learning Only)
 
 ### Step 1: Prerequisites (5 minutes)
 - **QuPath 0.3.0+** - [Download here](https://qupath.github.io/)
@@ -71,22 +97,24 @@ Choose your tissue type and download from HuggingFace:
 
 ---
 
-## 🏥 Clinical Use Cases
+## 🎓 Educational Use Cases (Non-Clinical Only)
 
-### **Diagnostic Pathology**
-- **Tumor grading** - Distinguish high/low grade adenocarcinomas
-- **Margin assessment** - Identify tumor vs normal tissue boundaries
-- **Quality control** - Verify diagnostic accuracy with AI confidence scores
+### **Learning Digital Pathology**
+- **AI Model Understanding** - See how machine learning works with medical images
+- **Workflow Integration** - Learn about software interoperability challenges
+- **Algorithm Evaluation** - Understand confidence scores and model limitations
 
-### **Research Applications**
-- **Tissue quantification** - Automated measurement of tissue components
-- **Biomarker studies** - Spatial analysis of tissue architecture
-- **Training cases** - Educational tool for residents and fellows
+### **Research and Development**
+- **Proof of Concept** - Test AI integration methodologies
+- **Code Learning** - Study Groovy/Python integration patterns
+- **Model Exploration** - Experiment with different AI architectures
 
-### **Laboratory Workflow**
-- **Screening assistance** - Pre-screen cases for pathologist review
-- **Standardization** - Consistent classification across observers
-- **Documentation** - Generate detailed reports with visual evidence
+### **Academic Training**
+- **Student Projects** - Hands-on experience with medical AI
+- **Research Methods** - Learn computational pathology techniques
+- **Software Development** - Practice building medical software tools
+
+**⚠️ Remember: This is for educational exploration only - never use for patient diagnosis!**
 
 ---
 
@@ -174,41 +202,52 @@ After installation, configure the plugin:
 
 ---
 
-## 🆘 Common Issues & Solutions
+## 🆘 Common Issues & Educational Debugging
 
 ### ❓ **"No SPIDER plugin in Extensions menu"**
 **Solution:** Run `scripts/spider_plugin_menu.groovy` directly instead of installer
+**Learning:** QuPath scripting challenges and plugin installation methods
+
+### ❓ **"JsonBuilder not found" error**
+**Solution:** QuPath version compatibility issue - use corrected installer script
+**Learning:** Java/Groovy library availability varies between versions
 
 ### ❓ **"Model not found" error**  
 **Solution:** Verify model paths in configuration, use absolute paths
+**Learning:** File path handling across different operating systems
 
 ### ❓ **"Python script failed"**
 **Solution:** Check Python environment, verify all packages installed
+**Learning:** Dependency management and environment isolation
 
-### ❓ **Slow processing**
-**Solution:** Use GPU if available, reduce max_patches for large slides
+### ❓ **Version compatibility issues**
+**Solution:** This code was tested on specific versions - may need adaptation
+**Learning:** Software versioning challenges in medical AI development
 
-### ❓ **Unexpected classifications**
-**Solution:** Verify correct model for tissue type, check annotation quality
+### ❓ **Unexpected or poor classifications**
+**Solution:** Remember this is experimental code - results may be unreliable
+**Learning:** AI model limitations and validation requirements
 
 ---
 
-## 🏆 Why Choose SPIDER?
+## 🏆 Why This Educational Project?
 
-### **Proven Accuracy**
-- Validated on large, expert-annotated datasets
-- Published performance metrics (90%+ accuracy)
-- Consistent results across different slides
+### **Learning Value**
+- Hands-on experience with real AI models in pathology
+- Practical examples of software integration challenges
+- Understanding of modern computational pathology workflows
 
-### **Clinical Integration**
-- Designed by pathologists for pathologists
-- Fits seamlessly into existing workflows  
-- Maintains pathologist oversight and control
+### **Code Examples**
+- Real-world Groovy scripting for QuPath extension
+- Python-Java interoperability patterns
+- AI model deployment and inference examples
 
-### **Research Ready**
-- Generates quantitative, reproducible results
-- Suitable for peer-reviewed publications
-- Supports large-scale studies
+### **Research Foundation**
+- Based on published, peer-reviewed SPIDER models
+- Demonstrates state-of-the-art computer vision techniques
+- Shows practical applications of transformer architectures
+
+**Note:** The SPIDER models themselves are research-validated, but this integration code is experimental.
 
 ---
 
@@ -233,18 +272,28 @@ After installation, configure the plugin:
 
 ---
 
-## 🎯 Ready to Start?
+## 🎯 Ready to Learn?
 
-1. **⬇️ Download this repository**
-2. **🔧 Follow the Quick Start guide above**  
-3. **🧠 Download your first AI model**
-4. **🚀 Start analyzing slides with AI!**
+1. **⬇️ Download this repository** 
+2. **📚 Follow the educational setup guide above**
+3. **🧠 Download the SPIDER models for experimentation**
+4. **🔬 Start exploring AI integration patterns!**
 
-**Questions?** Check our [detailed setup guide](docs/SPIDER_QuPath_Plugin.md) or watch the [video tutorial](https://www.youtube.com/watch?v=8tLORQ7yUIQ).
+**Questions?** Remember this is experimental code - expect issues and learning opportunities!
 
 ---
 
-*Transform your pathology workflow with AI - Professional accuracy, simplified integration.*
+## ⚖️ Legal and Ethical Considerations
+
+- **No Clinical Use:** This software is strictly for educational purposes
+- **No Warranties:** Code provided as-is with no guarantees of functionality
+- **AI-Generated:** Some code created with AI assistance may contain errors
+- **Experimental:** Not validated for medical use or patient care
+- **Learning Only:** Use only for understanding AI/pathology integration concepts
+
+---
+
+*A weekend exploration of AI in digital pathology - for learning, not clinical practice.*
 
 ## Overview
 
