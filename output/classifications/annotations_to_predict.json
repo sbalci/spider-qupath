@@ -1,13 +1,13 @@
 [
   {
-    "id": "e46e9ebc-812c-4aaf-b52f-8e390842d36c",
-    "slide_path": "qupath.lib.images.servers.openslide.OpenslideImageServer: file:/E:/kolonDeneme/biyopsi/ANON95IRSJ19O_1_1_001.svs",
-    "image_name": "ANON95IRSJ19O_1_1_001",
+    "id": "afef9d50-ad45-40fb-8540-e0018a0d6947",
+    "slide_path": "qupath.lib.images.servers.openslide.OpenslideImageServer: file:/E:/kolonDeneme/ANONOO5KSJ1LN_1_1_001/ANONOO5KSJ1LN_1_1_001.svs",
+    "image_name": "ANONOO5KSJ1LN_1_1_001",
     "roi": {
-      "x": 12532.0,
-      "y": 16655.0,
-      "width": 3150.0,
-      "height": 2865.0
+      "x": 11187.0,
+      "y": 12203.0,
+      "width": 2059.0,
+      "height": 2466.0
     }
   }
 ]

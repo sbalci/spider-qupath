@@ -8,7 +8,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.*
 import javafx.geometry.Insets
 import javafx.stage.Stage
-import groovy.json.JsonBuilder
+import qupath.lib.io.GsonTools
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
@@ -41,9 +41,9 @@ import javafx.geometry.Insets
 import javafx.stage.Stage
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
+import javafx.scene.input.KeyCombination
 import qupath.lib.gui.QuPathGUI
 import qupath.lib.gui.dialogs.Dialogs
-import qupath.lib.gui.scripting.QPEx
 import qupath.lib.scripting.QP
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -57,20 +57,24 @@ class SPIDERConfig {
     static boolean showTutorial = true
     
     static void save() {
-        def configFile = new File(QPEx.new File(new File(QPEx.PROJECT_BASE_DIR).getParent(), "config/spider_config.json").getAbsolutePath())
+        def configDir = buildFilePath(PROJECT_BASE_DIR, "config")
+        new File(configDir).mkdirs()
+        def configFile = new File(buildFilePath(configDir, "spider_config.json"))
         def config = [
             pythonPath: pythonPath,
             modelsBasePath: modelsBasePath,
             lastSelectedModel: lastSelectedModel,
             showTutorial: showTutorial
         ]
-        configFile.text = new groovy.json.JsonBuilder(config).toPrettyString()
+        def gson = GsonTools.getInstance(true)
+        configFile.text = gson.toJson(config)
     }
     
     static void load() {
-        def configFile = new File(QPEx.new File(new File(QPEx.PROJECT_BASE_DIR).getParent(), "config/spider_config.json").getAbsolutePath())
+        def configFile = new File(buildFilePath(PROJECT_BASE_DIR, "config", "spider_config.json"))
         if (configFile.exists()) {
-            def config = new groovy.json.JsonSlurper().parseText(configFile.text)
+            def gson = GsonTools.getInstance(true)
+            def config = gson.fromJson(configFile.text, Map.class)
             pythonPath = config.pythonPath ?: ""
             modelsBasePath = config.modelsBasePath ?: ""
             lastSelectedModel = config.lastSelectedModel ?: "colorectal"
@@ -789,7 +793,7 @@ def classAbbreviations = [
 // Get whole slide analysis script path
 def getWholeSlideScript() {
     // Copy the Python script to project directory if needed
-    def projectPath = QPEx.PROJECT_BASE_DIR
+    def projectPath = PROJECT_BASE_DIR
     def scriptPath = Paths.get(projectPath, "whole_slide_analysis_spider.py")
     
     // You would need to ensure this script is available
@@ -797,7 +801,7 @@ def getWholeSlideScript() {
 }
 
 // Create menu item in QuPath
-def gui = QPEx.getQuPath()
+def gui = getQuPath()
 def menu = gui.getMenu("Extensions>SPIDER Analysis", true)
 
 // Clear existing items
